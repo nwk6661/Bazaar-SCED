@@ -10,10 +10,10 @@ This mod is based on [`The Bazaar: Cheat Sheet`](https://jade-dead-e8e.notion.si
 
 ## Installation
 - ### Mod loader
-   Download [BepInEx 6.0.0-pre.2 x64](https://github.com/BepInEx/BepInEx/releases/download/v6.0.0-pre.2/BepInEx-Unity.IL2CPP-win-x64-6.0.0-pre.2.zip) (windows)  , [(for non windows)](https://github.com/BepInEx/BepInEx
+   Download [BepInEx 6.0.0-pre.2 x64](https://github.com/BepInEx/BepInEx/releases/download/v6.0.0-pre.2/BepInEx-Unity.IL2CPP-win-x64-6.0.0-pre.2.zip) (windows)  , [(for non windows, use x64 and mono)](https://github.com/BepInEx/BepInEx
 )  
    Extract in the games root folder (usually `C:\Program Files\Tempo Launcher - Beta\The Bazaar game_64\bazaarwinprodlatest`)  
-   Launch the game and a new console window should appear (lots of text will be displayed in the console)
+   Before continuing launch the game and a new console window should appear, if not you did the install wrong
 - ### Mod Install
   Download the [latest release](https://github.com/Infarcactus/Mod-The-Bazaar-Show-Combat-Encounter-Detail/releases)  
   Extract it in `BepInEx\plugins` (in your game files)
