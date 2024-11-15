@@ -1,1 +1,1 @@
-# Mod-The-Bazaar-Show-Combat-Encounter-Info
+# Mod: Show Combat Encounter Info
