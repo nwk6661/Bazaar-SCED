@@ -1,4 +1,4 @@
-# Mod: Show Combat Encounter Info
+# Mod: Show Combat Encounter Detail
 This mod shows combat encounter information when hovering them :
 - Health
 - Skills
