@@ -1,3 +1,4 @@
+You can join the bazaar modding discord server : https://discord.gg/88z59mUkhn
 # Mod: Show Combat Encounter Detail
 This mod shows combat encounter information when hovering them :
 - Health
