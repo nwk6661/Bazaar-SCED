@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("infarctus.ShowCombatEncounterDetail")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.1")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0.1+ce416708bde20f7f2c076aff4a192ab3c561f40f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0.1+032a524c1432dbb9761aa21fc6ad0ddc4c594994")]
 [assembly: System.Reflection.AssemblyProductAttribute("Show Combat Encounter Detail")]
 [assembly: System.Reflection.AssemblyTitleAttribute("infarctus.ShowCombatEncounterDetail")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.1")]
