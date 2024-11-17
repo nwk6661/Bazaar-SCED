@@ -10,6 +10,7 @@ public class Infarctus_Hook_Tooltip_FadeIn
 {
     public static void Postfix()
     {
+        InfarctusPluginCombatEncounterInfo.clean_destroy();
         if(InfarctusPluginCombatEncounterInfo.isPVEEncounter && InfarctusPluginCombatEncounterInfo.ToolTip_CardName!=""){
             InfarctusPluginCombatEncounterInfo.CreateImageDisplayFromCardName();
         }

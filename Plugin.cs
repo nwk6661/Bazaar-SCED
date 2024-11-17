@@ -19,6 +19,8 @@ public class InfarctusPluginCombatEncounterInfo : BaseUnityPlugin
     public static GameObject imageObjectBoard=null;
     public static GameObject canvasObjectWeapon=null;
     public static GameObject imageObjectWeapon=null;
+    public static Canvas canvas_board;
+    public static Canvas canvas_items;
     internal static new ManualLogSource Logger;
     
     private void Awake()
@@ -33,6 +35,7 @@ public class InfarctusPluginCombatEncounterInfo : BaseUnityPlugin
 
     
     public static void initalization(){
+        clean_destroy();
         canvasObjectBoard = new GameObject("ImageCanvasBoard");
         canvasObjectWeapon = new GameObject("ImageCanvasWeapon");
         imageObjectBoard = new GameObject("DisplayedImageBoard");
@@ -41,13 +44,27 @@ public class InfarctusPluginCombatEncounterInfo : BaseUnityPlugin
     public static void clean_destroy(){
         if(canvasObjectBoard!=null){
             Destroy(canvasObjectBoard);
-            Destroy(canvasObjectWeapon);
-            Destroy(imageObjectBoard);
-            Destroy(imageObjectWeapon);
             canvasObjectBoard=null;
-            imageObjectBoard=null;
+        }
+        if(canvasObjectWeapon!=null){
+            Destroy(canvasObjectWeapon);
             canvasObjectWeapon=null;
+        }
+        if(imageObjectBoard!=null){
+            Destroy(imageObjectBoard);
+            imageObjectBoard=null;
+        }
+        if(imageObjectWeapon!=null){
+            Destroy(imageObjectWeapon);
             imageObjectWeapon=null;
+        }
+        if(canvas_board!=null){
+            Destroy(canvas_board);
+            canvas_board=null;
+        }
+        if(canvas_items!=null){
+            Destroy(canvas_items);
+            canvas_items=null;
         }
     }
     
@@ -55,17 +72,21 @@ public class InfarctusPluginCombatEncounterInfo : BaseUnityPlugin
     public static void CreateImageDisplayFromCardName()
     {
         if(isPVEEncounter && ToolTip_CardName!=""){
+            clean_destroy();
             Logger.LogDebug("Creating Image Display for "+ToolTip_CardName);
             initalization();
-            CreateImageDisplay(ToolTip_CardName +"/board",-0.25f,-0.25f,canvasObjectBoard,imageObjectBoard);
-            CreateImageDisplay(ToolTip_CardName +"/items",0.25f,-0.25f,canvasObjectWeapon,imageObjectWeapon);
+            CreateImageDisplay(ToolTip_CardName +"/board",-0.25f,-0.25f,canvasObjectBoard,imageObjectBoard,canvas_board);
+            CreateImageDisplay(ToolTip_CardName +"/items",0.25f,-0.25f,canvasObjectWeapon,imageObjectWeapon,canvas_items);
         }
     }
 
 
 
-    private static void CreateImageDisplay(string filename,float relativeposX,float relativeposY,GameObject canvasObject,GameObject imageObject,string extension = ".png")
+    private static void CreateImageDisplay(string filename,float relativeposX,float relativeposY,GameObject canvasObject,GameObject imageObject,Canvas canvas, string extension = ".png")
     {
+        if(!File.Exists("BepInEx/plugins/ShowCombatEncounterDetail/Assets/" + filename + extension)){
+            return;
+        }
         // Get the camera size to set the image size proportionally
         var (width, height) = GetMainCameraSize();
         if (width == 0 || height == 0)
@@ -75,7 +96,7 @@ public class InfarctusPluginCombatEncounterInfo : BaseUnityPlugin
         }
 
         // Set up the canvas
-        Canvas canvas = canvasObject.AddComponent<Canvas>();
+        canvas = canvasObject.AddComponent<Canvas>();
         canvas.renderMode = RenderMode.ScreenSpaceOverlay;
         canvas.sortingOrder = 100;
 
