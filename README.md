@@ -20,7 +20,7 @@ This mod is based on [`The Bazaar: Cheat Sheet`](https://jade-dead-e8e.notion.si
 
 ## Uninstall
 - Go to your game folder and `BepInEx\plugins`
-- Delete ShowCombatEncounterDetail folder
+- Delete `ShowCombatEncounterDetail` folder
 
 ## Examples
 ![alt text](Github_Examples/1.png)  
