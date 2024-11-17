@@ -18,6 +18,10 @@ This mod is based on [`The Bazaar: Cheat Sheet`](https://jade-dead-e8e.notion.si
   Download the [latest release](https://github.com/Infarcactus/Mod-The-Bazaar-Show-Combat-Encounter-Detail/releases)  
   Extract it in `BepInEx\plugins` (in your game files)
 
+## Uninstall
+- Go to your game folder and `BepInEx\plugins`
+- Delete ShowCombatEncounterDetail folder
+
 ## Examples
 ![alt text](Github_Examples/1.png)  
 ![alt text](Github_Examples/2.png)  
