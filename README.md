@@ -15,7 +15,7 @@ This mod is based on [`The Bazaar: Cheat Sheet`](https://jade-dead-e8e.notion.si
    Extract in the games root folder (usually `C:\Program Files\Tempo Launcher - Beta\The Bazaar game_64\bazaarwinprodlatest`)  
    Before continuing launch the game and a new console window should appear, if not you did the install wrong
 - ### Mod Install
-  Download the [latest release](https://github.com/Infarcactus/Mod-The-Bazaar-Show-Combat-Encounter-Detail/releases)  
+  Download the [latest release](https://github.com/Infarcactus/Mod-The-Bazaar-Show-Combat-Encounter-Detail/releases) (not the source code)  
   Extract it in `BepInEx\plugins` (in your game files)
 
 ## Uninstall
