@@ -1,111 +1,136 @@
-﻿using BepInEx;
+﻿using System.IO;
+using BepInEx;
+using BepInEx.Configuration;
 using BepInEx.Logging;
-using UnityEngine;
-using System.IO;
 using HarmonyLib;
-using System.Reflection;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace ShowCombatEncounterDetail;
 
 [BepInPlugin(PluginInfo.PLUGIN_GUID, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
-public class InfarctusPluginCombatEncounterInfo : BaseUnityPlugin
+public class ShowCombatEncounterDetail : BaseUnityPlugin
 {
+    private static Harmony _harmony;
+    private static ConfigEntry<float> _configRelativePosX;
+    private static ConfigEntry<float> _configRelativePosY;
+    
     public static string ToolTipCardName = "";
     public static bool IsPveEncounter = false;
-    public static GameObject CanvasObjectBoard = null;
-    public static GameObject ImageObjectBoard = null;
-    public static GameObject CanvasObjectWeapon = null;
-    public static GameObject ImageObjectWeapon = null;
-    public static Canvas CanvasBoard;
-    public static Canvas CanvasItems;
-    internal static new ManualLogSource Logger;
+    private static GameObject _canvasObjectBoard;
+    private static GameObject _imageObjectBoard;
+    private static GameObject _canvasObjectWeapon;
+    private static GameObject _imageObjectWeapon;
+    private static Canvas _canvasBoard;
+    private static Canvas _canvasItems;
+    private static ManualLogSource _logger;
 
     private void Awake()
     {
         // Plugin startup logic
-        Logger = base.Logger;
-        Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} is loaded!");
+        _logger = base.Logger;
+        _logger.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} is loaded!");
+        
+        _configRelativePosX = Config.Bind(
+            "General",
+            "relativePosX",
+            0.0f,
+            new ConfigDescription(
+                "Relative X position of the encounter card as a ratio between [-1, 1]",
+                 new AcceptableValueRange<float>(-1f, 1f)
+                )
+            );
 
-        Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly());
+
+        _configRelativePosY = Config.Bind(
+            "General",
+            "relativePosY",
+            -.125f,
+            new ConfigDescription(
+                "Relative Y position of the encounter card as a ratio between [-1, 1]",
+                new AcceptableValueRange<float>(-1f, 1f)
+            )
+        );
+        
+        _harmony = Harmony.CreateAndPatchAll(typeof(Patches.Patches));
+    }
+
+    private void OnDestroy()
+    {
+        _harmony?.UnpatchSelf();
+        CleanDestroy();
     }
 
 
-    public static void Initialization()
+    private static void Initialization()
     {
-        clean_destroy();
-        CanvasObjectBoard = new GameObject("ImageCanvasBoard");
-        CanvasObjectWeapon = new GameObject("ImageCanvasWeapon");
-        ImageObjectBoard = new GameObject("DisplayedImageBoard");
-        ImageObjectWeapon = new GameObject("DisplayedImageWeapon");
+        CleanDestroy();
+        _canvasObjectBoard = new GameObject("ImageCanvasBoard");
+        _canvasObjectWeapon = new GameObject("ImageCanvasWeapon");
+        _imageObjectBoard = new GameObject("DisplayedImageBoard");
+        _imageObjectWeapon = new GameObject("DisplayedImageWeapon");
     }
 
-    public static void clean_destroy()
+    public static void CleanDestroy()
     {
-        if (CanvasObjectBoard != null)
+        if (_canvasObjectBoard != null)
         {
-            Destroy(CanvasObjectBoard);
-            CanvasObjectBoard = null;
+            Destroy(_canvasObjectBoard);
+            _canvasObjectBoard = null;
         }
 
-        if (CanvasObjectWeapon != null)
+        if (_canvasObjectWeapon != null)
         {
-            Destroy(CanvasObjectWeapon);
-            CanvasObjectWeapon = null;
+            Destroy(_canvasObjectWeapon);
+            _canvasObjectWeapon = null;
         }
 
-        if (ImageObjectBoard != null)
+        if (_imageObjectBoard != null)
         {
-            Destroy(ImageObjectBoard);
-            ImageObjectBoard = null;
+            Destroy(_imageObjectBoard);
+            _imageObjectBoard = null;
         }
 
-        if (ImageObjectWeapon != null)
+        if (_imageObjectWeapon != null)
         {
-            Destroy(ImageObjectWeapon);
-            ImageObjectWeapon = null;
+            Destroy(_imageObjectWeapon);
+            _imageObjectWeapon = null;
         }
 
-        if (CanvasBoard != null)
+        if (_canvasBoard != null)
         {
-            Destroy(CanvasBoard);
-            CanvasBoard = null;
+            Destroy(_canvasBoard);
+            _canvasBoard = null;
         }
 
-        if (CanvasItems != null)
-        {
-            Destroy(CanvasItems);
-            CanvasItems = null;
-        }
+        if (_canvasItems == null) return;
+        
+        Destroy(_canvasItems);
+        _canvasItems = null;
     }
 
 
     public static void CreateImageDisplayFromCardName()
     {
         if (!IsPveEncounter || ToolTipCardName == "") return;
-        clean_destroy();
-        Logger.LogDebug("Creating Image Display for " + ToolTipCardName);
+        _logger.LogDebug("Creating Image Display for " + ToolTipCardName);
         Initialization();
-        CreateImageDisplay(ToolTipCardName + "/board", -0.25f, -0.25f, CanvasObjectBoard, ImageObjectBoard,
-            CanvasBoard);
-        CreateImageDisplay(ToolTipCardName + "/items", 0.25f, -0.25f, CanvasObjectWeapon, ImageObjectWeapon,
-            CanvasItems);
+        CreateImageDisplay($"BepInEx/plugins/ShowCombatEncounterDetail/Assets/{ToolTipCardName}.png",
+            _configRelativePosX.Value, _configRelativePosY.Value, _canvasObjectBoard, _imageObjectBoard,
+            _canvasBoard);
     }
 
 
-    private static void CreateImageDisplay(string filename, float relativeposX, float relativeposY,
-        GameObject canvasObject, GameObject imageObject, Canvas canvas, string extension = ".png")
+    private static void CreateImageDisplay(string detailsImagePath, float relativePosX, float relativePosY,
+        GameObject canvasObject, GameObject imageObject, Canvas canvas)
     {
-        if (!File.Exists("BepInEx/plugins/ShowCombatEncounterDetail/Assets/" + filename + extension))
-        {
-            return;
-        }
+        if (!File.Exists(detailsImagePath)) return;
 
         // Get the camera size to set the image size proportionally
         var (width, height) = GetMainCameraSize();
         if (width == 0 || height == 0)
         {
-            Logger.LogWarning("Main Camera not found, unable to create image display.");
+            _logger.LogWarning("Main Camera not found, unable to create image display.");
             return;
         }
 
@@ -115,54 +140,54 @@ public class InfarctusPluginCombatEncounterInfo : BaseUnityPlugin
         canvas.sortingOrder = 100;
 
         // Add a CanvasScaler to handle scaling
-        CanvasScaler canvasScaler = canvasObject.AddComponent<CanvasScaler>();
+        var canvasScaler = canvasObject.AddComponent<CanvasScaler>();
         canvasScaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
         canvasScaler.referenceResolution = new Vector2((float) width, (float) height);
 
         // Initialize the imageObject as a child of canvasObject
         imageObject.transform.SetParent(canvasObject.transform);
 
-        Image imageComponent = imageObject.AddComponent<Image>();
+        var imageComponent = imageObject.AddComponent<Image>();
 
-        Texture2D image_texture = null;
+        Texture2D imageTexture = null;
 
         // Load the image as a Texture2D
 
-        image_texture =
-            LoadTextureFromFile("BepInEx/plugins/ShowCombatEncounterDetail/Assets/" + filename + extension);
+        imageTexture =
+            LoadTextureFromFile(detailsImagePath);
 
-        if (image_texture != null)
+        if (imageTexture != null)
         {
             // Convert Texture2D to a Sprite
-            Rect rect = new Rect(0, 0, image_texture.width, image_texture.height);
-            Sprite sprite = Sprite.Create(image_texture, rect, new Vector2(0.5f, 0.5f));
+            var rect = new Rect(0, 0, imageTexture.width, imageTexture.height);
+            var sprite = Sprite.Create(imageTexture, rect, new Vector2(0.5f, 0.5f));
             imageComponent.sprite = sprite;
 
             // Calculate the aspect ratio of the original image
-            float imageAspectRatio = (float) image_texture.width / image_texture.height;
+            var imageAspectRatio = (float) imageTexture.width / imageTexture.height;
 
             // Set the size of the Image while preserving aspect ratio
-            float scaleFactor = 0.5f; // Adjust this scale factor to fit your needs
-            float displayWidth = (float) width * scaleFactor;
-            float displayHeight = displayWidth / imageAspectRatio; // Calculate height based on aspect ratio
+            const float scaleFactor = 0.5f; // Adjust this scale factor to fit your needs
+            var displayWidth = (float) width * scaleFactor;
+            var displayHeight = displayWidth / imageAspectRatio; // Calculate height based on aspect ratio
 
             if (displayHeight > (float) height / 2)
             {
-                float coeff_reduce = (float) height / 2.0f / displayHeight;
-                displayHeight *= coeff_reduce;
-                displayWidth *= coeff_reduce;
+                var coeffReduce = (float) height / 2.0f / displayHeight;
+                displayHeight *= coeffReduce;
+                displayWidth *= coeffReduce;
             }
 
-            RectTransform rectTransform = imageObject.GetComponent<RectTransform>();
+            var rectTransform = imageObject.GetComponent<RectTransform>();
             rectTransform.sizeDelta = new Vector2(displayWidth, displayHeight);
 
             // Center the image on screen
             rectTransform.anchoredPosition =
-                new Vector2((float) (width * relativeposX), (float) (height * relativeposY));
+                new Vector2((float) (width * relativePosX), (float) (height * relativePosY));
         }
         else
         {
-            Logger.LogError("Failed to load image texture.");
+            _logger.LogError("Failed to load image texture.");
         }
     }
 
@@ -170,37 +195,28 @@ public class InfarctusPluginCombatEncounterInfo : BaseUnityPlugin
     private static Texture2D LoadTextureFromFile(string filePath)
     {
         if (!File.Exists(filePath)) return null;
-        byte[] fileData = File.ReadAllBytes(filePath);
-        Texture2D texture = new Texture2D(2, 2); // Create a small texture to be replaced
-        if (texture.LoadImage(fileData)) // Load the image file data
-        {
-            return texture;
-        }
-
-        return null;
+        var fileData = File.ReadAllBytes(filePath);
+        var texture = new Texture2D(2, 2); // Create a small texture to be replaced
+        return texture.LoadImage(fileData) ? // Load the image file data
+            texture : null;
     }
 
     private static (double, double) GetMainCameraSize()
     {
         // Attempt to find the camera at the specified path
-        GameObject cameraObject = GameObject.Find("DefaultSceneCameras/MainCamera");
-        if (cameraObject != null)
+        var cameraObject = GameObject.Find("DefaultSceneCameras/MainCamera");
+        if (cameraObject == null) return (0, 0);
+        var mainCamera = cameraObject.GetComponent<Camera>();
+        if (mainCamera != null)
         {
-            Camera mainCamera = cameraObject.GetComponent<Camera>();
-            if (mainCamera != null)
-            {
-                // Log the scaledPixelWidth and scaledPixelHeight
-                int width = mainCamera.scaledPixelWidth;
-                int height = mainCamera.scaledPixelHeight;
-                return (width, height);
-            }
-            else
-            {
-                Logger.LogWarning("Camera component not found on MainCamera object.");
-                return (0, 0);
-            }
+            // Log the scaledPixelWidth and scaledPixelHeight
+            var width = mainCamera.scaledPixelWidth;
+            var height = mainCamera.scaledPixelHeight;
+            return (width, height);
         }
 
+        _logger.LogWarning("Camera component not found on MainCamera object.");
         return (0, 0);
+
     }
 }

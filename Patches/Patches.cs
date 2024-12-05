@@ -1,37 +1,35 @@
 using HarmonyLib;
 using TheBazaar.UI.Tooltips;
 using TheBazaar.Tooltips;
-using UnityEngine;
 
-using ShowCombatEncounterDetail;
+namespace ShowCombatEncounterDetail.Patches;
 
-[HarmonyPatch(typeof(CardTooltipController), "StartTooltipFadeIn")]
-public class Infarctus_Hook_Tooltip_FadeIn
+class Patches
 {
-    public static void Postfix()
+    [HarmonyPatch(typeof(CardTooltipController), "StartTooltipFadeIn")]
+    [HarmonyPostfix]
+    private static void CardTooltipController_StartTooltipFadeIn(CardTooltipController __instance)
     {
-        InfarctusPluginCombatEncounterInfo.clean_destroy();
-        if(InfarctusPluginCombatEncounterInfo.IsPveEncounter && InfarctusPluginCombatEncounterInfo.ToolTipCardName!=""){
-            InfarctusPluginCombatEncounterInfo.CreateImageDisplayFromCardName();
+        if (ShowCombatEncounterDetail.IsPveEncounter && ShowCombatEncounterDetail.ToolTipCardName != "")
+        {
+            ShowCombatEncounterDetail.CreateImageDisplayFromCardName();
         }
     }
-}
-[HarmonyPatch(typeof(CardTooltipController), "StartTooltipFadeOut")]
-public class Infarctus_Hook_Tooltip_FadeOut
-{
-    public static void Postfix()
+
+    [HarmonyPatch(typeof(CardTooltipController), "StartTooltipFadeOut")]
+    [HarmonyPostfix]
+    private static void CardTooltipController_StartTooltipFadeOut(CardTooltipController __instance)
     {
-        InfarctusPluginCombatEncounterInfo.IsPveEncounter = false;
-        InfarctusPluginCombatEncounterInfo.ToolTipCardName = "";
-        InfarctusPluginCombatEncounterInfo.clean_destroy();
+        ShowCombatEncounterDetail.IsPveEncounter = false;
+        ShowCombatEncounterDetail.ToolTipCardName = "";
+        ShowCombatEncounterDetail.CleanDestroy();
     }
-}
-[HarmonyPatch(typeof(CardTooltipData), "GetPVEEncounterLevel")]
-public class Infarctus_Hook_GetPVEEncounterLevel
-{
-    public static void Postfix(CardTooltipData __instance, ref uint __result)
+
+    [HarmonyPatch(typeof(CardTooltipData), nameof(CardTooltipData.GetPVEEncounterLevel))]
+    [HarmonyPostfix]
+    private static void CardTooltipController_StartTooltipFadeOut(CardTooltipData __instance)
     {
-        InfarctusPluginCombatEncounterInfo.ToolTipCardName = __instance.GetTitle();
-        InfarctusPluginCombatEncounterInfo.IsPveEncounter = true;
+        ShowCombatEncounterDetail.ToolTipCardName = __instance.GetTitle();
+        ShowCombatEncounterDetail.IsPveEncounter = true;
     }
 }

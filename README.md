@@ -1,31 +1,40 @@
-[Leia este README em Português](./README.pt-br.md)
-
-You can join the bazaar modding discord server : https://discord.gg/88z59mUkhn
-# Mod: Show Combat Encounter Detail
+# Show Combat Encounter Detail
 This mod shows combat encounter information when hovering them :
 - Health
 - Skills
 - Items & item description  
 
-The mod is still a work in progress I've spent a lot of hours on this.  
-This mod is based on [`The Bazaar: Cheat Sheet`](https://jade-dead-e8e.notion.site/The-Bazaar-Cheat-Sheet-13531ff9bda580e19a10c96bb6d9e346#13831ff9bda580a4b8e3d1da20ab4576)
-
+The images are programmatically taken screenshots of the encounter details on 
+[howbazaar.gg](https://www.howbazaar.gg/monsters)
 ## Install
-- ### Mod loader
-  If you never launched/did an update/reinstalled the game, launch it at least once before continuing (just get to the main menu that's all)  
-  Download [The latest version of BepInEx 5](https://github.com/BepInEx/BepInEx/releases/download/v5.4.23.2/BepInEx_win_x64_5.4.23.2.zip) (windows)  , [(for non windows, use x64 and mono)](https://github.com/BepInEx/BepInEx
-)  
-   Extract in the games root folder (`<Tempo Launcher -> Settings -> Game Installation Directory>/bazaarwinprodlatest/`)  
-   Before continuing launch the game and a new console window should appear, if not you did the install wrong
-- ### Mod Install
-  Download the [latest release](https://github.com/nwk6661/Bazaar-SCED-Bepin5/releases) (not the source code)  
-  Extract it in `<your game install>\BepInEx\plugins`. you should see a folder named `ShowCombatEncounterDetail`
+### Mod loader
+If you already have bepinex installed, skip this section.
+  1. Download [The latest version of BepInEx 5](https://github.com/BepInEx/BepInEx/releases/download/v5.4.23.2/BepInEx_win_x64_5.4.23.2.zip)  
+   2. Extract in the games root folder (`<Tempo Launcher -> Settings -> Game Installation Directory>/bazaarwinprodlatest/`)
+### Mod Install
+  1. Download the [latest release](https://github.com/nwk6661/Bazaar-SCED-Bepin5/releases) (not the source code)  
+  2. Extract it in `<your game install>\BepInEx\plugins`. you should see a folder named `ShowCombatEncounterDetail`
+
+## Configuration
+After launching the game at least once with the mod installed, you should have a new configuration file at `BepInEx\config\ShowCombatEncounterDetail.cfg`  
+Here you can roughly change where the new tooltip appears as a ratio relative to the center of the screen. For example,
+the default values `[0,-.125]` for the X and Y parameters respectively put the image centered on the horizontal axis
+and roughly over your items on the vertical axis. The example screenshot is a value of `-.25`.  
+_Restart the game after changing these values for them to take effect._
 
 ## Uninstall
-- Go to your game folder and `BepInEx\plugins`
-- Delete `ShowCombatEncounterDetail` folder
+Delete the `BepInEx\plugins\ShowCombatEncounterDetail` folder in your game files.
 
 ## Examples
-![alt text](Github_Examples/1.png)  
-![alt text](Github_Examples/2.png)  
-![alt text](Github_Examples/3.png)
+![alt text](./readme_images\ex1.png)
+
+
+## Planned
+Color the flavor text for keywords (e.g. slow, damage, haste, ...) in item descriptions to match the colors in game for better readability
+
+
+## Credits
+[infarctus](https://github.com/Infarcactus/) for original mod implementation  
+[howbazaar.gg](https://www.howbazaar.gg/) for data  
+  
+You can join the bazaar modding discord server : https://discord.gg/88z59mUkhn

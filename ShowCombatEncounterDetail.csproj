@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <AssemblyName>infarctus.ShowCombatEncounterDetail</AssemblyName>
+    <AssemblyName>ShowCombatEncounterDetail</AssemblyName>
     <Product>Show Combat Encounter Detail</Product>
-    <Version>1.0.0.1</Version>
+    <Version>1.1</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
     <RestoreAdditionalProjectSources>
@@ -13,8 +13,9 @@
       https://nuget.samboy.dev/v3/index.json
     </RestoreAdditionalProjectSources>
     <RootNamespace>ShowCombatEncounterDetail</RootNamespace>
-    <PackageId>nwk6661.ShowCombatEncounterDetail.BepInEx5</PackageId>
-    <Authors>infarctus, nwk6661</Authors>
+    <PackageId>nwk6661.ShowCombatEncounterDetail</PackageId>
+    <Authors>nwk6661</Authors>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
