@@ -1,92 +1,106 @@
 ﻿using BepInEx;
 using BepInEx.Logging;
-using BepInEx.Unity.Mono;
-using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 using System.IO;
 using HarmonyLib;
 using System.Reflection;
+using UnityEngine.UI;
 
 namespace ShowCombatEncounterDetail;
 
-[BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
+[BepInPlugin(PluginInfo.PLUGIN_GUID, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
 public class InfarctusPluginCombatEncounterInfo : BaseUnityPlugin
 {
-    public static string ToolTip_CardName = "";
-    public static bool isPVEEncounter = false;
-    public static GameObject canvasObjectBoard=null;
-    public static GameObject imageObjectBoard=null;
-    public static GameObject canvasObjectWeapon=null;
-    public static GameObject imageObjectWeapon=null;
-    public static Canvas canvas_board;
-    public static Canvas canvas_items;
+    public static string ToolTipCardName = "";
+    public static bool IsPveEncounter = false;
+    public static GameObject CanvasObjectBoard = null;
+    public static GameObject ImageObjectBoard = null;
+    public static GameObject CanvasObjectWeapon = null;
+    public static GameObject ImageObjectWeapon = null;
+    public static Canvas CanvasBoard;
+    public static Canvas CanvasItems;
     internal static new ManualLogSource Logger;
-    
+
     private void Awake()
     {
         // Plugin startup logic
         Logger = base.Logger;
-        Logger.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is loaded!");
+        Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} is loaded!");
 
         Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly());
-        
     }
 
-    
-    public static void initalization(){
+
+    public static void Initialization()
+    {
         clean_destroy();
-        canvasObjectBoard = new GameObject("ImageCanvasBoard");
-        canvasObjectWeapon = new GameObject("ImageCanvasWeapon");
-        imageObjectBoard = new GameObject("DisplayedImageBoard");
-        imageObjectWeapon = new GameObject("DisplayedImageWeapon");
+        CanvasObjectBoard = new GameObject("ImageCanvasBoard");
+        CanvasObjectWeapon = new GameObject("ImageCanvasWeapon");
+        ImageObjectBoard = new GameObject("DisplayedImageBoard");
+        ImageObjectWeapon = new GameObject("DisplayedImageWeapon");
     }
-    public static void clean_destroy(){
-        if(canvasObjectBoard!=null){
-            Destroy(canvasObjectBoard);
-            canvasObjectBoard=null;
+
+    public static void clean_destroy()
+    {
+        if (CanvasObjectBoard != null)
+        {
+            Destroy(CanvasObjectBoard);
+            CanvasObjectBoard = null;
         }
-        if(canvasObjectWeapon!=null){
-            Destroy(canvasObjectWeapon);
-            canvasObjectWeapon=null;
+
+        if (CanvasObjectWeapon != null)
+        {
+            Destroy(CanvasObjectWeapon);
+            CanvasObjectWeapon = null;
         }
-        if(imageObjectBoard!=null){
-            Destroy(imageObjectBoard);
-            imageObjectBoard=null;
+
+        if (ImageObjectBoard != null)
+        {
+            Destroy(ImageObjectBoard);
+            ImageObjectBoard = null;
         }
-        if(imageObjectWeapon!=null){
-            Destroy(imageObjectWeapon);
-            imageObjectWeapon=null;
+
+        if (ImageObjectWeapon != null)
+        {
+            Destroy(ImageObjectWeapon);
+            ImageObjectWeapon = null;
         }
-        if(canvas_board!=null){
-            Destroy(canvas_board);
-            canvas_board=null;
+
+        if (CanvasBoard != null)
+        {
+            Destroy(CanvasBoard);
+            CanvasBoard = null;
         }
-        if(canvas_items!=null){
-            Destroy(canvas_items);
-            canvas_items=null;
+
+        if (CanvasItems != null)
+        {
+            Destroy(CanvasItems);
+            CanvasItems = null;
         }
     }
-    
+
 
     public static void CreateImageDisplayFromCardName()
     {
-        if(isPVEEncounter && ToolTip_CardName!=""){
-            clean_destroy();
-            Logger.LogDebug("Creating Image Display for "+ToolTip_CardName);
-            initalization();
-            CreateImageDisplay(ToolTip_CardName +"/board",-0.25f,-0.25f,canvasObjectBoard,imageObjectBoard,canvas_board);
-            CreateImageDisplay(ToolTip_CardName +"/items",0.25f,-0.25f,canvasObjectWeapon,imageObjectWeapon,canvas_items);
-        }
+        if (!IsPveEncounter || ToolTipCardName == "") return;
+        clean_destroy();
+        Logger.LogDebug("Creating Image Display for " + ToolTipCardName);
+        Initialization();
+        CreateImageDisplay(ToolTipCardName + "/board", -0.25f, -0.25f, CanvasObjectBoard, ImageObjectBoard,
+            CanvasBoard);
+        CreateImageDisplay(ToolTipCardName + "/items", 0.25f, -0.25f, CanvasObjectWeapon, ImageObjectWeapon,
+            CanvasItems);
     }
 
 
-
-    private static void CreateImageDisplay(string filename,float relativeposX,float relativeposY,GameObject canvasObject,GameObject imageObject,Canvas canvas, string extension = ".png")
+    private static void CreateImageDisplay(string filename, float relativeposX, float relativeposY,
+        GameObject canvasObject, GameObject imageObject, Canvas canvas, string extension = ".png")
     {
-        if(!File.Exists("BepInEx/plugins/ShowCombatEncounterDetail/Assets/" + filename + extension)){
+        if (!File.Exists("BepInEx/plugins/ShowCombatEncounterDetail/Assets/" + filename + extension))
+        {
             return;
         }
+
         // Get the camera size to set the image size proportionally
         var (width, height) = GetMainCameraSize();
         if (width == 0 || height == 0)
@@ -103,7 +117,7 @@ public class InfarctusPluginCombatEncounterInfo : BaseUnityPlugin
         // Add a CanvasScaler to handle scaling
         CanvasScaler canvasScaler = canvasObject.AddComponent<CanvasScaler>();
         canvasScaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-        canvasScaler.referenceResolution = new Vector2((float)width, (float)height);
+        canvasScaler.referenceResolution = new Vector2((float) width, (float) height);
 
         // Initialize the imageObject as a child of canvasObject
         imageObject.transform.SetParent(canvasObject.transform);
@@ -113,9 +127,9 @@ public class InfarctusPluginCombatEncounterInfo : BaseUnityPlugin
         Texture2D image_texture = null;
 
         // Load the image as a Texture2D
-        try{
-            image_texture = LoadTextureFromFile("BepInEx/plugins/ShowCombatEncounterDetail/Assets/" + filename + extension);
-        }catch{}
+
+        image_texture =
+            LoadTextureFromFile("BepInEx/plugins/ShowCombatEncounterDetail/Assets/" + filename + extension);
 
         if (image_texture != null)
         {
@@ -125,49 +139,48 @@ public class InfarctusPluginCombatEncounterInfo : BaseUnityPlugin
             imageComponent.sprite = sprite;
 
             // Calculate the aspect ratio of the original image
-            float imageAspectRatio = (float)image_texture.width / image_texture.height;
+            float imageAspectRatio = (float) image_texture.width / image_texture.height;
 
             // Set the size of the Image while preserving aspect ratio
             float scaleFactor = 0.5f; // Adjust this scale factor to fit your needs
-            float displayWidth = (float)width * scaleFactor;
+            float displayWidth = (float) width * scaleFactor;
             float displayHeight = displayWidth / imageAspectRatio; // Calculate height based on aspect ratio
 
-            if(displayHeight> (float)height/2){
-                float coeff_reduce = (float)height/2.0f/displayHeight;
-                displayHeight*=coeff_reduce;
-                displayWidth*=coeff_reduce;
+            if (displayHeight > (float) height / 2)
+            {
+                float coeff_reduce = (float) height / 2.0f / displayHeight;
+                displayHeight *= coeff_reduce;
+                displayWidth *= coeff_reduce;
             }
 
             RectTransform rectTransform = imageObject.GetComponent<RectTransform>();
             rectTransform.sizeDelta = new Vector2(displayWidth, displayHeight);
 
             // Center the image on screen
-            rectTransform.anchoredPosition = new Vector2((float)(width * relativeposX), (float)(height * relativeposY));
+            rectTransform.anchoredPosition =
+                new Vector2((float) (width * relativeposX), (float) (height * relativeposY));
         }
         else
         {
             Logger.LogError("Failed to load image texture.");
         }
-
     }
-
 
 
     private static Texture2D LoadTextureFromFile(string filePath)
     {
-        if (File.Exists(filePath))
+        if (!File.Exists(filePath)) return null;
+        byte[] fileData = File.ReadAllBytes(filePath);
+        Texture2D texture = new Texture2D(2, 2); // Create a small texture to be replaced
+        if (texture.LoadImage(fileData)) // Load the image file data
         {
-            byte[] fileData = File.ReadAllBytes(filePath);
-            Texture2D texture = new Texture2D(2, 2); // Create a small texture to be replaced
-            if (texture.LoadImage(fileData)) // Load the image file data
-            {
-                return texture;
-            }
+            return texture;
         }
+
         return null;
     }
 
-    private static (double,double) GetMainCameraSize()
+    private static (double, double) GetMainCameraSize()
     {
         // Attempt to find the camera at the specified path
         GameObject cameraObject = GameObject.Find("DefaultSceneCameras/MainCamera");
@@ -184,9 +197,10 @@ public class InfarctusPluginCombatEncounterInfo : BaseUnityPlugin
             else
             {
                 Logger.LogWarning("Camera component not found on MainCamera object.");
-                return (0,0);
+                return (0, 0);
             }
         }
-        return (0,0);
+
+        return (0, 0);
     }
 }

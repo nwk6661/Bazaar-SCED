@@ -13,14 +13,13 @@ This mod is based on [`The Bazaar: Cheat Sheet`](https://jade-dead-e8e.notion.si
 ## Install
 - ### Mod loader
   If you never launched/did an update/reinstalled the game, launch it at least once before continuing (just get to the main menu that's all)  
-  Download [BepInEx 6.0.0-pre.2 x64](https://github.com/BepInEx/BepInEx/releases/download/v6.0.0-pre.2/BepInEx-Unity.Mono-win-x64-6.0.0-pre.2.zip) (windows)  , [(for non windows, use x64 and mono)](https://github.com/BepInEx/BepInEx
+  Download [The latest version of BepInEx 5](https://github.com/BepInEx/BepInEx/releases/download/v5.4.23.2/BepInEx_win_x64_5.4.23.2.zip) (windows)  , [(for non windows, use x64 and mono)](https://github.com/BepInEx/BepInEx
 )  
-   Extract in the games root folder (usually `C:\Program Files\Tempo Launcher - Beta\The Bazaar game_64\bazaarwinprodlatest`)  
+   Extract in the games root folder (`<Tempo Launcher -> Settings -> Game Installation Directory>/bazaarwinprodlatest/`)  
    Before continuing launch the game and a new console window should appear, if not you did the install wrong
 - ### Mod Install
-  Download the [latest release](https://github.com/Infarcactus/Mod-The-Bazaar-Show-Combat-Encounter-Detail/releases) (not the source code)  
-  Extract it in `BepInEx\plugins` (in your game files)
-  If you did everything properly in `C:\Program Files\Tempo Launcher - Beta\The Bazaar game_64\bazaarwinprodlatest\BepInEx\plugins` you should see a folder named `ShowCombatEncounterDetail`
+  Download the [latest release](https://github.com/nwk6661/Bazaar-SCED-Bepin5/releases) (not the source code)  
+  Extract it in `<your game install>\BepInEx\plugins`. you should see a folder named `ShowCombatEncounterDetail`
 
 ## Uninstall
 - Go to your game folder and `BepInEx\plugins`
