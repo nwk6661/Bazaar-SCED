@@ -26,7 +26,7 @@ _Restart the game after changing these values for them to take effect._
 Delete the `BepInEx\plugins\ShowCombatEncounterDetail` folder in your game files.
 
 ## Examples
-![alt text](./readme_images\ex1.png)
+![alt text](readme_images/ex1.png)
 
 
 ## Planned
