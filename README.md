@@ -11,6 +11,7 @@ The images are programmatically taken screenshots of the encounter details on
 If you already have bepinex installed, skip this section.
   1. Download [The latest version of BepInEx 5](https://github.com/BepInEx/BepInEx/releases/download/v5.4.23.2/BepInEx_win_x64_5.4.23.2.zip)  
    2. Extract in the games root folder (`<Tempo Launcher -> Settings -> Game Installation Directory>/bazaarwinprodlatest/`)
+   3. In `BepInEx\config\BepInEx.cfg`, set `HideManagerGameObject = true` (it should be near the top)
 ### Mod Install
   1. Download the [latest release](https://github.com/nwk6661/Bazaar-SCED-Bepin5/releases) (not the source code)  
   2. Extract it in `<your game install>\BepInEx\plugins`. you should see a folder named `ShowCombatEncounterDetail`
