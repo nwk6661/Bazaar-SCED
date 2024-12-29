@@ -23,6 +23,8 @@
     <PackageReference Include="BepInEx.Core" Version="5.4.21" />
     <PackageReference Include="BepInEx.PluginInfoProps" Version="1.*"/>
     <PackageReference Include="UnityEngine.Modules" Version="2022.3.40" IncludeAssets="compile"/>
+    <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.2" PrivateAssets="all"/>
+
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
@@ -30,11 +32,38 @@
   </ItemGroup>
   
   <ItemGroup>
-    <Reference Include="Assembly-CSharp.dll">
-      <HintPath>deps\Assembly-CSharp.dll</HintPath>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>game-dlls\Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="BazaarBattleService">
+      <HintPath>game-dlls\BazaarBattleService.dll</HintPath>
+    </Reference>
+    <Reference Include="BazaarGameClient">
+      <HintPath>game-dlls\BazaarGameClient.dll</HintPath>
+    </Reference>
+    <Reference Include="BazaarGameShared">
+      <HintPath>game-dlls\BazaarGameShared.dll</HintPath>
+    </Reference>
+    <Reference Include="BazaarUnityTools">
+      <HintPath>game-dlls\BazaarUnityTools.dll</HintPath>
+    </Reference>
+    <Reference Include="MMHOOK_Assembly-CSharp">
+      <HintPath>mmhook-dlls\MMHOOK_Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="MMHOOK_BazaarBattleService">
+      <HintPath>mmhook-dlls\MMHOOK_BazaarBattleService.dll</HintPath>
+    </Reference>
+    <Reference Include="MMHOOK_BazaarGameClient">
+      <HintPath>mmhook-dlls\MMHOOK_BazaarGameClient.dll</HintPath>
+    </Reference>
+    <Reference Include="MMHOOK_BazaarGameShared">
+      <HintPath>mmhook-dlls\MMHOOK_BazaarGameShared.dll</HintPath>
+    </Reference>
+    <Reference Include="MMHOOK_BazaarUnityTools">
+      <HintPath>mmhook-dlls\MMHOOK_BazaarUnityTools.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>deps\UnityEngine.UI.dll</HintPath>
+      <HintPath>game-dlls\UnityEngine.UI.dll</HintPath>
     </Reference>
   </ItemGroup>
 
