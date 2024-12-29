@@ -37,5 +37,3 @@ Color the flavor text for keywords (e.g. slow, damage, haste, ...) in item descr
 ## Credits
 [infarctus](https://github.com/Infarcactus/) for original mod implementation  
 [howbazaar.gg](https://www.howbazaar.gg/) for data  
-  
-You can join the bazaar modding discord server : https://discord.gg/88z59mUkhn
